@@ -3,25 +3,23 @@ package example;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Exception;
 import java.sql.Statement;
 
 public class JDBCExample3 {
 	public static void main(String[] args) {
 		
-		// EMPLOYEE Å×ÀÌºí¿¡¼­ 
-		// ±Ş¿©¸¦ 300¸¸ ÀÌ»ó 500¸¸ ÀÌÇÏ·Î ¹Ş´Â »ç¿øÀÇ 
-		// »ç¹ø, ÀÌ¸§, ºÎ¼­ÄÚµå, ±Ş¿©¸¦
-		// ±Ş¿© ³»¸²Â÷¼øÀ¸·Î Ãâ·Â
+		// EMPLOYEE í…Œì´ë¸”ì—ì„œ
+		// ê¸‰ì—¬ë¥¼ 300ë§Œ ì´ìƒ 500ë§Œ ì´í•˜ë¡œ ë°›ëŠ” ì‚¬ì›ì˜
+		// ì‚¬ë²ˆ, ì´ë¦„, ë¶€ì„œì½”ë“œ, ê¸‰ì—¬ë¥¼
+		// ê¸‰ì—¬ ë‚´ë¦¼ì°¨ìˆœìœ¼ë¡œ ì¶œë ¥
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			// Oracle JDBC Driver¸¦ ¸Ş¸ğ¸®¿¡ ·Îµå(ÀûÀç) == °´Ã¼·Î ¸¸µê
 			Class.forName("oracle.jdbc.OracleDriver");
-						
+			
 			String type = "jdbc:oracle:thin:@";
 			String host = "112.221.156.34";
 			String port = ":12345";
@@ -29,37 +27,53 @@ public class JDBCExample3 {
 			String userName = "KH00_TEACHER";
 			String password = "KH1234";
 			
-			StringBuilder sb = new StringBuilder();
-			sb.append("SELECT EMP_ID");
-			
-			
-			
-			conn = DriverManager.getConnection( 
-					type + host + port + dbName + userName + password 
+			conn = DriverManager.getConnection(
+					type + host + port + dbName,
+					userName,
+					password
 					);
-		
 			
-			String sql = "SELECT * FROM DEPARTMENT";
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT EMP_ID, EMP_NAME, DEPT_CODE, SALARY ");
+			sb.append("FROM EMPLOYEE ");
+			sb.append("WHERE SALARY BETWEEN 3000000 AND 5000000 ");
+			sb.append("ORDER BY SALARY DESC ");
+			
+			String sql = sb.toString();
 			
 			stmt = conn.createStatement();
+			
 			rs = stmt.executeQuery(sql);
 			
 			while(rs.next()) {
-				int empId = rs.getInt("EMP_ID");
+				String empId = rs.getString("EMP_ID");
 				String empName = rs.getString("EMP_NAME");
 				String deptCode = rs.getString("DEPT_CODE");
 				int salary = rs.getInt("SALARY");
 				
 				System.out.printf(
 						"%s / %s / %s / %d \n",
-						empId, empName, deptCode, salary
-						);
+						empId, empName, deptCode, salary);
 			}
 			
-			
-		} catch(Exception e) { // ¿¹¿ÜÃ³¸®¿¡ ´ÙÇü¼º Àû¿ë
-			
+		}catch (Exception e) { // ì˜ˆì™¸ì²˜ë¦¬ì— ë‹¤í˜•ì„± ì ìš©
+			e.printStackTrace();
+		
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(stmt != null) stmt.close();
+				if(conn != null) conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+		
+		
+		
+		
+		
+		
 		
 	}
 }

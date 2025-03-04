@@ -131,11 +131,11 @@ public class JDBCExample1 {
 						+ "/ 지역코드 : %s \n", deptId, deptTitle, locationId);
 			}
 			
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			// SQLException : DB 연결과 관련된 예외 중 최상위 예외
 			e.printStackTrace();
 		
-		}catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			// ojdbc10.jar에서 제공하는
 			// OracleDriver 클래스가 없을 경우 발생하는 예외
 			e.printStackTrace();

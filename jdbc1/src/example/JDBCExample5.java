@@ -36,19 +36,20 @@ public class JDBCExample5 {
 					);
 			// 범위 입력 받기
 			
-			System.out.println("== 범위 내 급여 받는 직원 조회 ==");
-			System.out.print("최소값 입력");
-			int min = sc.nextInt();
-						
-			System.out.print("최대값 입력");
-			int max = sc.nextInt();
+			System.out.println("== 부서명을 입력 받아 직원 조회 ==");
+			System.out.print("부서명");
+			String dept = sc.next();
 						
 			StringBuilder sb = new StringBuilder();
 			sb.append("SELECT E.EMP_ID, E.EMP_NAME, D.DEPT_TITLE , J.JOB_NAME ");
 			sb.append("FROM EMPLOYEE E ");
 			sb.append("JOIN DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_ID ) ");
 			sb.append("JOIN JOB J ON (E.JOB_CODE = J.JOB_CODE) ");
+			sb.append("WHERE DEPT_TITLE ");
+			sb.append("LIKE ");
+			sb.append("'"+dept+"'");
 			sb.append("ORDER BY E.JOB_CODE DESC ");
+			
 			
 			String sql = sb.toString();
 			
@@ -68,18 +69,19 @@ public class JDBCExample5 {
 			}
 
 			
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch(ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
 			try {
+				// 생성 역순으로 close 하는 것이 좋다!
 				if(rs != null) rs.close();
 				if(stmt != null) stmt.close();
 				if(conn != null) conn.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+				
+			} catch(Exception e) {
+				e.printStackTrace();			}
 		}
 		
 	}
